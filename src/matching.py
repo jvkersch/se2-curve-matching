@@ -1,23 +1,23 @@
 import numpy as np
 
 from ode_system import integrate, compute_linear_displacement
-
-
+#from shooting import solve_bvp
 
 
 class MatchingProblem:
 
     def __init__(self, c0, c1, m):
 
-        if c0.shape != c1.shape:
+        if c0.length() != c1.length():
             raise ValueError('Curves must have the same number of points.')
 
-        self.num_points = c0.shape[0]
+        self.num_points = c0.length()
 
         self.c0 = c0
         self.c1 = c1
 
         self.h = c0.h
+        self.m = m
 
     def integrate(self, theta0):
         """
@@ -41,7 +41,7 @@ class MatchingProblem:
         theta, omega, v, delta_theta, delta_omega, delta_v = \
             integrate(self.c0, self.c1, theta0, self.m)
 
-        g = GroupTrajectory(N=self.num_points)
+        g = GroupTrajectory(self.num_points, self.h, self.m)
         g.theta = theta 
 
         # Fill in linear displacements
@@ -57,6 +57,12 @@ class MatchingProblem:
         g.delta_v = delta_v
         
         return g
+
+    #def match(self, theta_guess):
+
+#        xxx = solve_bvp(c0, c1, m, theta_guess, full_output=False, tol=1e-8, n_iter=20):
+
+
 
 
 class GroupTrajectory:

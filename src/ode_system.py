@@ -129,6 +129,10 @@ def integrate_one_step(R1, omega0, v0, c0_points, c1_points, m):
 
     """
 
+    #import sys
+    #print R1, omega0, v0, c0_points, c1_points, m
+    #sys.exit(-1)
+
     # Unpack points
     # 
     # c0_current has already been matched to c1_current,
@@ -167,6 +171,14 @@ def coefficients_first_variation(omega, v, c_pt, m):
 def compute_first_variation(omega0, v0, omega1, v1, R1, 
                             delta_omega0, delta_v0, delta_theta1,
                             c0_points, c1_points, m):
+
+#    import sys
+#    print omega0, v0, omega1, v1, R1
+#    print delta_omega0, delta_v0, delta_theta1
+#    print c0_points, c1_points, m
+#    sys.exit(-1)
+
+
     """
     Solve the first-variation equations. This amounts to solving a 
     (complicated) system of linear equations.
@@ -206,8 +218,8 @@ def compute_first_variation(omega0, v0, omega1, v1, R1,
     c0_current, c0_next = c0_points
     c1_current, c1_next = c1_points
 
-    c_plus, d_plus = coefficients_first_var(omega1, v1, c0_current, m)
-    c_neg, d_neg = coefficients_first_var(-omega0, -v0, c0_current, m)
+    c_plus, d_plus = coefficients_first_variation(omega1, v1, c0_current, m)
+    c_neg, d_neg = coefficients_first_variation(-omega0, -v0, c0_current, m)
 
     b = (np.dot(R1.T, c1_next - c1_current) + c0_current - 
          np.dot(cayley_so2(omega1), c0_next))

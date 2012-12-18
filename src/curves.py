@@ -1,7 +1,8 @@
 import numpy as np
 import scipy.io as sio
 
-from lie_algebra_se2 import rotation
+from lie_algebra import rotation
+
 
 class DiscreteCurve:
 
