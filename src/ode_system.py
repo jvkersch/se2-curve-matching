@@ -129,10 +129,6 @@ def integrate_one_step(R1, omega0, v0, c0_points, c1_points, m):
 
     """
 
-    #import sys
-    #print R1, omega0, v0, c0_points, c1_points, m
-    #sys.exit(-1)
-
     # Unpack points
     # 
     # c0_current has already been matched to c1_current,
@@ -171,13 +167,6 @@ def coefficients_first_variation(omega, v, c_pt, m):
 def compute_first_variation(omega0, v0, omega1, v1, R1, 
                             delta_omega0, delta_v0, delta_theta1,
                             c0_points, c1_points, m):
-
-#    import sys
-#    print omega0, v0, omega1, v1, R1
-#    print delta_omega0, delta_v0, delta_theta1
-#    print c0_points, c1_points, m
-#    sys.exit(-1)
-
 
     """
     Solve the first-variation equations. This amounts to solving a 
