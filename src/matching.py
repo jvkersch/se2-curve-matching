@@ -1,7 +1,7 @@
 import numpy as np
 
 from ode_system import integrate, compute_linear_displacement
-#from shooting import solve_bvp
+from shooting import solve_bvp
 
 
 class MatchingProblem:
@@ -43,13 +43,8 @@ class MatchingProblem:
 
         g = GroupTrajectory(self.num_points, self.h, self.m)
         g.theta = theta 
+        g.x = self.compute_displacements(theta)
 
-        # Fill in linear displacements
-        g.x = np.empty((self.num_points, 2))
-        for k in xrange(0, self.num_points):
-            g.x[k, :] = compute_linear_displacement(self.c0[k, :], 
-                                                    self.c1[k, :], 
-                                                    theta[k])
         g.omega = omega
         g.v = v
 
@@ -58,11 +53,62 @@ class MatchingProblem:
         
         return g
 
-    #def match(self, theta_guess):
+    def match(self, theta_guess):
+        """
+        Matching...
 
-#        xxx = solve_bvp(c0, c1, m, theta_guess, full_output=False, tol=1e-8, n_iter=20):
+        """
+        theta, omega, v, delta_theta, delta_omega, delta_v, res, n_iter = \
+            solve_bvp(self.c0, self.c1, self.m, theta_guess, full_output=True)
 
+        g = GroupTrajectory(self.num_points, self.h, self.m)
+        g.theta = theta 
+        g.x = self.compute_displacements(theta)
 
+        g.omega = omega
+        g.v = v
+
+        g.delta_omega = delta_omega
+        g.delta_v = delta_v
+        
+        return g, res, n_iter
+
+    def sweep_theta_range(self, N=100, verbose=True):
+        """
+        Sweep across a range of initial guesses for theta and record energy of 
+        corresponding minimizer, obtained through shooting.
+        
+        """
+        energies = np.empty((N, 4))
+    
+        for n in xrange(0, N):
+            theta_guess = 2*np.pi*n/N
+            if verbose:
+                print "%d: theta_guess = %f, " % (n, theta_guess),
+
+            g, res, n_iter = self.match(theta_guess)
+            E = g.energy()
+
+            energies[n, :] = theta_guess, E, res, n_iter
+
+            if verbose: 
+                print "E = %e, res = %e, n_iter = %d" % (E, res, n_iter)
+
+        return energies
+
+    def compute_displacements(self, theta):
+        """
+        Helper function...
+
+        """
+        # Fill in linear displacements
+        x = np.empty((self.num_points, 2))
+        for k in xrange(0, self.num_points):
+            x[k, :] = compute_linear_displacement(self.c0[k, :], 
+                                                  self.c1[k, :], 
+                                                  theta[k])
+
+        return x
 
 
 class GroupTrajectory:
@@ -83,7 +129,6 @@ class GroupTrajectory:
 
         self.h = h
         self.m = m
-
 
     def energy(self):
         """
