@@ -1,7 +1,17 @@
 import numpy as np
 import scipy.io as sio
+from scipy.interpolate import splprep, splev
 
 from lie_algebra import rotation
+
+def _load_raw_data(filename, curvename):
+    """
+    Load coordinates for discrete curve from file.
+
+    """
+    d = sio.loadmat(filename)
+    curve = d[curvename]
+    return curve[:, 0], curve[:, 1]
 
 
 class DiscreteCurve:
@@ -60,8 +70,14 @@ class DiscreteCurve:
         self.smin = d['smin'][0][0]
         self.smax = d['smax'][0][0]
 
+    def set_points(self, array):
+        self.points = np.array(array)
+        self.N = self.points.shape[0]
+        self.smin = 0.
+        self.smax = 1.
 
-def sample_curve(x, y, smin=0., smax=1., N=100):
+
+def sample_continous_curve(x, y, smin=0., smax=1., N=100):
     """
     Sample points at regular parameter values to obtain a discrete curve.
 
@@ -74,6 +90,22 @@ def sample_curve(x, y, smin=0., smax=1., N=100):
 
     return c
 
+def sample_discrete_curve(x, y, N=100, s=0, k=3):
+    """
+    Take sample from set of points to obtain discrete interpolating curve 
+    with a pre-determined number of points.
+
+    """
+    c = DiscreteCurve(0., 1., N)
+
+    B, _ = splprep((x, y), k=k, s=s)
+    u = np.arange(0, 1., 1./N)
+    pts = splev(u, B)
+
+    pts = np.array(pts).T
+    c.set_points(pts)
+
+    return c
 
 def Circle(radius=1., x0=0., y0=0., N=100):
     """
