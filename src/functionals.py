@@ -1,8 +1,18 @@
+
+
 import numpy as np
 
 import math
 from lie_algebra import cayley_so2, rotation
 
+def apply_rotation(angle, point_in, point_out):
+    """
+    Apply rotation over given angle to point.
+
+    """
+    x, y = point_in
+    c, s = cos(angle), sin(angle)
+    
 
 
 
@@ -22,8 +32,8 @@ def energy_functional(thetas, *args):
         #c1_points = (c1[k, :], c1[k+1, :])
         
         # v = compute_linear_velocity(R, omega, c0_points, c1_points)
-        b = (np.dot(R1.T, c1[k+1,:] - c1[k,:]) + c0[k,:] - 
-             np.dot(cayley_so2(omega1), c0[k+1,:]))
+        b = (np.dot(R.T, c1[k+1,:] - c1[k,:]) + c0[k,:] - 
+             np.dot(cayley_so2(omega), c0[k+1,:]))
 
 
         E += (m*omega**2 + (1+omega**2/4)*np.dot(b, b))/(2*h)

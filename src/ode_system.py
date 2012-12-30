@@ -149,7 +149,20 @@ def integrate_one_step(R1, omega0, v0, c0_points, c1_points, m):
     # Determine next group matching element
     # Only the rotational part is needed, since the translational part 
     # can be determined from the constraints, if necessary.
+
+    #th0 = math.atan2(R1[1,0], R1[0,0])
+
+    #print R1 
+    #print cayley_so2(omega1)
+    #print "theta before: ", th0
+
     R1 = np.dot(R1, cayley_so2(omega1))
+    #th1 = math.atan2(R1[1,0], R1[0,0])
+
+    #print "theta after: ", th1 
+    #print "res: ", math.tan((th1-th0)/2) - omega1/2
+
+    #print
 
     return R1, omega1, v1
 
@@ -314,7 +327,7 @@ def integrate(c0, c1, theta0, m):
 
         # Record computed values
         omega[s] = omega1
-        theta[s+1] = math.atan2(R1[1,0], R1[0,0]) 
+        theta[s+1] = math.atan2(R2[1,0], R2[0,0]) 
 
         v[s, :] = v1
 
