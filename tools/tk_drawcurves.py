@@ -3,15 +3,18 @@ import tkFileDialog
 
 import scipy.io as sio
 
-# TODO store curves in normalized form, i.e. in RH cartesian frame with
-# coords between 0 and 1
+# Width and height of image canvas
+WIDTH  = 300
+HEIGHT = 300
 
-def tk_coords(points):
-        """Returns coordinates in a flat list, understood by Tk."""
-        return [c for pt in points for c in pt]
+
+def _tk_coords(points):
+    """Helper function to flatten list of (x, y) pairs into 
+    a 1D list (this is what Tk expects)."""
+    return [c for pt in points for c in pt]
 
 class Curves:
-    """Store points on a number of curves in 2D Cartesian coordinate system."""
+    """Store points on a number of curves in image space."""
 
     def __init__(self):
         self.curves = [[]]
@@ -53,9 +56,21 @@ class Curves:
         d = {}
         for n, curve in enumerate(self.curves):
             if len(curve) > 0:
-                d['c%d' % n] = curve
+                d['c%d' % n] = self._image2cartesian(curve)
         sio.savemat(filename, d, oned_as='row')
 
+    def _image2cartesian(self, points):
+        """Convert points on curve from image space to right-handed
+	Cartesian frame, with coordinates between 0 and 1, and the 
+	x-axis pointing to the right and the y-axis upwards."""
+
+        new_points = []
+	for x, y in points:
+            x = float(x) / WIDTH
+            y = 1. - float(y) / WIDTH
+            new_points.append((x, y))
+
+        return new_points
 
 
 class StatusBar(Frame):
@@ -80,8 +95,6 @@ class StatusBar(Frame):
 
 
 class App: 
-    WIDTH  = 300
-    HEIGHT = 300
 
     def __init__(self, master, curves):
 
@@ -90,7 +103,7 @@ class App:
         frame = Frame(master)
         frame.pack()
 
-        self.canvas = Canvas(frame, width=self.WIDTH, height=self.HEIGHT, 
+        self.canvas = Canvas(frame, width=WIDTH, height=HEIGHT, 
                              background='#FF9')
         self.canvas.configure(cursor="crosshair")
         self.canvas.bind("<B1-Motion>", self.on_mouse_down)
@@ -129,11 +142,15 @@ class App:
         """Redraw current curves and set status."""
         self.canvas.delete(ALL)
 
-        # Draw
         for curve in self.curves.curves:
+            # Draw continuous curves first
             if len(curve) > 1:
-                pts = tk_coords(curve)
+                pts = _tk_coords(curve)
                 self.canvas.create_line(pts)
+            # Mark individual points
+            for x, y in curve:
+                self.canvas.create_oval(x-1, y-1, x+1, y+1, fill='Red')
+
 
         # Update status 
         self.status.set("Points: %d", self.curves.num_points())
@@ -147,7 +164,7 @@ class App:
         """Record location of cursor if inside canvas."""
 
         x, y = event.x, event.y
-        if x < 0 or x > self.WIDTH or y < 0 or y > self.HEIGHT:
+        if x < 0 or x > WIDTH or y < 0 or y > HEIGHT:
             return 
 
         self.curves.add_point((event.x, event.y))
