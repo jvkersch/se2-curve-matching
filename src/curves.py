@@ -114,7 +114,7 @@ def Circle(radius=1., x0=0., y0=0., N=100):
     """
     x = lambda s: x0 + radius*np.cos(2*np.pi*s)
     y = lambda s: y0 + radius*np.sin(2*np.pi*s)
-    return sample_curve(x, y, 0., 1., N)
+    return sample_continuous_curve(x, y, 0., 1., N)
 
 
 def FigureEight(radius=1., x0=0., y0=0., N=100):
@@ -124,7 +124,7 @@ def FigureEight(radius=1., x0=0., y0=0., N=100):
     """
     x = lambda s: x0 + radius*np.sin(4*np.pi*s)
     y = lambda s: y0 + radius*np.sin(2*np.pi*s)
-    return sample_curve(x, y, 0., 1., N)
+    return sample_continuous_curve(x, y, 0., 1., N)
 
 
 def LogSpiral(radius=1., x0=0., y0=0., N=100):
@@ -134,7 +134,7 @@ def LogSpiral(radius=1., x0=0., y0=0., N=100):
     """
     x = lambda s: x0 + radius*np.exp(-s)*np.cos(2*np.pi*s)
     y = lambda s: y0 + radius*np.exp(-s)*np.sin(2*np.pi*s)
-    return sample_curve(x, y, 0., 1., N)
+    return sample_continuous_curve(x, y, 0., 1., N)
 
 
 def ConstantCurve(x0=0., y0=0., N=100):
