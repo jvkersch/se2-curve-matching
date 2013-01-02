@@ -77,7 +77,7 @@ class DiscreteCurve:
         self.smax = 1.
 
 
-def sample_continous_curve(x, y, smin=0., smax=1., N=100):
+def sample_continuous_curve(x, y, smin=0., smax=1., N=100):
     """
     Sample points at regular parameter values to obtain a discrete curve.
 
