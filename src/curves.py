@@ -56,6 +56,22 @@ class DiscreteCurve:
         R = rotation(-angle)
         self.points = np.dot(self.points, R)
 
+    def mean(self):
+        """
+        Compute the mean of the points on the curve.
+
+        """
+        return np.sum(self.points, axis=0)/self.N
+
+    def dimensions(self):
+        """
+        Compute width and height of the curve.
+
+        """
+        width  = np.max(self.points[:, 0]) - np.min(self.points[:, 0])
+        height = np.max(self.points[:, 1]) - np.min(self.points[:, 1])
+        return width, height
+
     def save(self, filename):
 
         d = {'points': self.points, 'N': self.N, 

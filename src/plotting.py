@@ -41,3 +41,6 @@ class LineImage:
     def show(self):  # TODO kwargs
         self.finalize()
         plt.show()
+
+    def close(self):
+        plt.close()
