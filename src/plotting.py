@@ -34,13 +34,13 @@ class LineImage:
         self.ax.axis('equal')    
         self.ax.axis(self.dimensions)
 
-    def save(self, f): # TODO kwargs
+    def save(self, f, *args, **kwargs):
         self.finalize()
-        plt.savefig(f)
+        plt.savefig(f, *args, **kwargs)
 
-    def show(self):  # TODO kwargs
+    def show(self, *args, **kwargs):
         self.finalize()
-        plt.show()
+        plt.show(*args, **kwargs)
 
     def close(self):
         plt.close()
