@@ -7,7 +7,8 @@ import math
 import numpy as np
 import numpy.random
 from curves import FigureEight, LogSpiral
-from cfunctionals import energy_functional, energy_functional_slow
+from cfunctionals import (energy_functional, energy_functional_slow,
+                          energy_functional_angles)
 
 
 class EnergyValueTest(unittest.TestCase):
@@ -26,10 +27,12 @@ class EnergyValueTest(unittest.TestCase):
     
         E0 = energy_functional_slow(thetas, self.c0, self.c1, self.m, self.h)
         E1 = energy_functional(X, self.c0, self.c1, self.m, self.h)
+        E2 = energy_functional_angles(thetas, self.c0, self.c1, self.m, self.h)
 
         print "Exact energy:", E0
         print "Optimized energy:", E1
-        
+        print "Optimized energy, angles:", E2
+
         rel_diff = (E0-E1)/E0
         print "Relative difference:", rel_diff
 

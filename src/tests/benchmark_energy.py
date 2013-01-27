@@ -7,7 +7,7 @@ sys.path.append('..')
 import numpy as np
 import numpy.random
 from curves import FigureEight, LogSpiral
-from cfunctionals import energy_functional
+from cfunctionals import energy_functional, energy_functional_angles
 
 N = 100
 
@@ -27,4 +27,9 @@ if __name__ == '__main__':
     t = timeit.timeit('energy_functional(X, c0, c1, m, h)', 
                       number=n, setup=setup)
 
-    print "Time to run %e iterations: %f." % (n, t)
+    print "Time to run %e iterations (direct): %f." % (n, t)
+
+    t = timeit.timeit('energy_functional_angles(thetas, c0, c1, m, h)', 
+                      number=n, setup=setup)
+
+    print "Time to run %e iterations (using angles): %f." % (n, t)

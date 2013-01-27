@@ -7,6 +7,10 @@ cimport cython
 DTYPE=np.double
 ctypedef np.double_t DTYPE_t
 
+cdef extern from "math.h":
+    double sin(double)
+    double cos(double)
+
 def energy_functional_slow(thetas, c0, c1, m, h):
     """
     Very slow version of the energy functional. To be used for comparison 
@@ -87,3 +91,27 @@ cpdef double energy_functional(np.ndarray[DTYPE_t, ndim=2] X,
         E += (m*omega*omega + (1+omega*omega/4)*(bx*bx + by*by))/(2*h)
             
     return E
+
+@cython.cdivision(True)
+@cython.boundscheck(False) 
+@cython.wraparound(False)
+cpdef double energy_functional_angles(np.ndarray[DTYPE_t, ndim=1] theta, 
+                               np.ndarray[DTYPE_t, ndim=2] c0, 	  	
+                               np.ndarray[DTYPE_t, ndim=2] c1, 
+                               double m, double h):
+    """
+    Optimized version of the energy functional.
+
+    """
+    
+    cdef double angle
+    cdef int i, n = theta.shape[0]
+    cdef np.ndarray[DTYPE_t, ndim=2] X = \
+    	np.empty((n, 2))
+
+    for i from 0 <= i < n:
+        angle = theta[i]
+        X[i, 0] = cos(angle)
+        X[i, 1] = sin(angle)
+            
+    return energy_functional(X, c0, c1, m, h)
