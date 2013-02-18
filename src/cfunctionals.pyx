@@ -86,7 +86,7 @@ cpdef double energy_functional(np.ndarray[DTYPE_t, ndim=2] X,
         by = c0[k, 1] - (omega*c0x + factor*c0y)/denominator
         
         bx +=  x0*vx + y0*vy
-        by += -y0*vx + x0*vx
+        by += -y0*vx + x0*vy
 
         E += (m*omega*omega + (1+omega*omega/4)*(bx*bx + by*by))/(2*h)
             
