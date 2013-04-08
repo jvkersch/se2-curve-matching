@@ -83,8 +83,6 @@ class MatchingProblem:
     
         for n in xrange(0, N):
             theta_guess = 2*np.pi*n/N
-            if verbose:
-                print "%d: theta_guess = %f, " % (n, theta_guess),
 
             g, res, n_iter = self.match(theta_guess)
             E = g.energy()
@@ -92,7 +90,9 @@ class MatchingProblem:
             energies[n, :] = theta_guess, E, res, n_iter
 
             if verbose: 
-                print "E = %e, res = %e, n_iter = %d" % (E, res, n_iter)
+                print "%d: theta_guess = %f, theta_final = %f, " \
+                    "E = %e, res = %e, n_iter = %d" % \
+                    (n, theta_guess, g.theta[0], E, res, n_iter)
 
         return energies
 
