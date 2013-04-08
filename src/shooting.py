@@ -8,12 +8,13 @@ from lie_algebra import J
 from ode_system import (integrate, coefficients_first_variation, 
                         right_boundary_condition)
 
-import ipdb
+#import ipdb
 
 def solve_bvp(c0, c1, m, theta_guess, full_output=False, tol=1e-8, n_iter=20):
 
     delta = -1; n = 0
-    
+    theta_start = theta_guess 
+
     while (n < n_iter) and (abs(delta) > tol): 
 
         # ipdb.set_trace()
@@ -30,11 +31,19 @@ def solve_bvp(c0, c1, m, theta_guess, full_output=False, tol=1e-8, n_iter=20):
             
         c, d = coefficients_first_variation(omega[-1], v[-1, :], c0[-1, :], m)
         denom = c*delta_omega[-1] + np.dot(d, delta_v[-1, :])
+
+        if abs(denom) < 1e-7 and abs(numer) < 1e-7:
+            # For now, report error and finish up prematurely
+            # TODO investigate when this happens, and apply l'Hospital
+            print "Warning: ill-behaved update quotient in shooting method. " \
+                "Initial value for theta_guess: %d." % theta_start
+            return -1
          
         # Update initial guess
         n += 1
         delta = numer/denom
-        theta_guess -= delta        
+        theta_guess -= delta 
+        theta_guess %= 2*np.pi
     
     out = theta, omega, v, delta_theta, delta_omega, delta_v
     if full_output:
