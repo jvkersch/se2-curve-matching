@@ -22,7 +22,7 @@ class DiscreteCurve:
         self.smax = smax
         self.N = N
 
-        self.h = (self.smax - self.smin)/self.N
+        self.h = (self.smax - self.smin)/(self.N - 1)
         self.points = np.zeros((self.N, 2))
 
     def length(self):
