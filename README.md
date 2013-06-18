@@ -10,7 +10,6 @@ It's recommended to create a virtual environment for this package, e.g.
 
     virtualenv curve_matching
 	source curve_matching/bin/activate
-	cd curve_matching
 
 Then install the package as follows:
 
