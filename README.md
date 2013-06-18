@@ -6,13 +6,22 @@ This repository provides a new algorithm for matching/registration of planar, pa
 How to use this package
 -----------------------
 
-It's recommended to install this package in a virtual environment:
+It's recommended to create a virtual environment for this package, e.g.
 
     virtualenv curve_matching
 	source curve_matching/bin/activate
-	pip install -e git+git@github.com:jvkersch/se2-curve-matching.git@master#egg=Discrepancy
+	cd curve_matching
+
+Then install the package as follows:
+
+    pip install -e git+git@github.com:jvkersch/se2-curve-matching.git@master#egg=Discrepancy
 	
-This will add the discrepancy code to your site-packages. 
+This will add the discrepancy code to your site-packages. The directory `curve_matching/src/discrepancy/worksheets` contains a bunch of ipython worksheets which illustrate working with the package. To fire up ipython, do 
+
+    cd curve_matching/src/discrepancy/worksheets
+	ipython notebook --pylab inline	
+
+To re-do the simulations in the paper, just run the four worksheets. This will take some time, and will put the figures of the paper in the `Figures` subfolder and some (temporary) data in `data`.
 	
 Further reading
 ---------------
