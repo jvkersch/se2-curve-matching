@@ -14,7 +14,11 @@ It's recommended to create a virtual environment for this package, e.g.
 Then install the package as follows:
 
     pip install -e git+git@github.com:jvkersch/se2-curve-matching.git@master#egg=Discrepancy
-	
+
+If you've downloaded the package as a zip file, install it instead as follows:
+
+	pip install <path-to-zip-file>/se2-curve-matching-master.zip
+
 This will add the discrepancy code to your site-packages. The directory `curve_matching/src/discrepancy/worksheets` contains a bunch of ipython worksheets which illustrate working with the package. To fire up ipython, do 
 
     cd curve_matching/src/discrepancy/worksheets
